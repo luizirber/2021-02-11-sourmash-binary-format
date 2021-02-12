@@ -1,0 +1,26 @@
+[package]
+name = "binfmts"
+version = "0.1.0"
+authors = ["Luiz Irber <luiz.irber@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sourmash = "0.10.0"
+serde = { version = "1.0.110", features = ["derive"] }
+niffler = "2.3.1"
+# cli
+anyhow = "1.0"
+structopt = "0.3.15"
+env_logger = "0.7.1"
+log = "0.4.8"
+# the formats
+serde_json = "1.0.56"
+avro-rs = "0.13.0"
+#bitmagic = { git = "https://github.com/luizirber/bitmagic-rs", branch = "dev_20201027" }
+flexbuffers = "0.2.2"
+bincode = "1.2.1"
+serde_cbor = "0.11.1"
+postcard = { version = "0.5.2", features = ["alloc"] }
+rmp-serde = "0.15.4"
