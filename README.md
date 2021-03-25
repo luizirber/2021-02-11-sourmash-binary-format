@@ -13,7 +13,10 @@
 ## To check
 
 - [ ] avro (need to write schema)
+    * https://github.com/flavray/avro-rs
+    * https://avro.apache.org/docs/current/spec.html#schemas
 - [ ] arrow?
+    * easy check: https://github.com/domoritz/json2arrow
 - [ ] [Tree-buf](https://github.com/That3Percent/tree-buf)
 - [ ] [cap'n proto](https://capnproto.org/)
 - [ ] [rkyv](https://github.com/djkoloski/rkyv)
