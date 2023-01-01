@@ -37,41 +37,53 @@ fn main() -> Result<()> {
     std::fs::create_dir_all(&outdir)?;
 
     // Avro
-    let minhash_schema = r#"{
-    "name": "MinHash",
-    "type":"record",
-    "fields":[
-        { "name": "scaled", "type": "int" },
-        { "name": "ksize", "type": "int" },
-        { "name": "molecule", "type": {
-          "type": "enum",
-          "name": "moltype",
-          "symbols": ["DNA", "protein", "hp", "dayhoff"] }
-        },
-        { "name":"hashes",
-          "type": {
-             "type": "array",  
-              "items":{
-                  "name":"hash",
-                   "type":"fixed",
-                   "size": 8
-              }
-           }
-        }
-    ]
-    }"#;
-
-    let sig_schema = r#"{
+    let sig_schema = r#"
+{
     "name": "SourmashSignature",
     "type":"record",
     "fields":[
        { "name": "filename", "type": "string"},
        { "name": "name", "type": "string"},
-       { "name": "minhash", "type": "MinHash" }
-     ]
-    }"#;
+       { "name": "minhash",
+         "type": {
+         "type": "record",
+         "name": "MinHash",
+         "fields":[
+           { "name": "num", "type": "int" },
+           { "name": "scaled", "type": "int" },
+           { "name": "ksize", "type": "int" },
+           { "name": "molecule", "type": {
+             "type": "enum",
+             "name": "moltype",
+             "symbols": ["DNA", "protein", "hp", "dayhoff"] }
+           },
+           { "name":"hashes",
+             "type": {
+                "type": "array",  
+                 "items":{
+                     "name":"hash",
+                     "type":"fixed",
+                     "size": 8
+                 }
+              }
+           },
+           { "name":"abunds",
+             "type": {
+                 "type": "array",  
+                 "items":{
+                     "name":"abund",
+                     "type":"int"
+                 }
+             }
+           }
+         ]
+       }
+       }
+    ]
+}
+"#;
 
-    let schema = avro_rs::Schema::parse_list(&[sig_schema, minhash_schema])?;
+    let schema = avro_rs::Schema::parse_list(&[sig_schema])?;
 
     let mut writer = avro_rs::Writer::with_codec(&schema[0], Vec::new(), avro_rs::Codec::Deflate);
 
