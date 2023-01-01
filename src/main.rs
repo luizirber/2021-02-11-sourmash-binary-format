@@ -57,7 +57,7 @@ fn main() -> Result<()> {
              "name": "moltype",
              "symbols": ["DNA", "protein", "hp", "dayhoff"] }
            },
-           { "name":"hashes",
+           { "name":"mins",
              "type": {
                 "type": "array",  
                  "items":{
