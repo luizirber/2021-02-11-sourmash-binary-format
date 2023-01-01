@@ -37,11 +37,38 @@ fn main() -> Result<()> {
     std::fs::create_dir_all(&outdir)?;
 
     // Avro
-    /*
     let minhash_schema = r#"{
+    "name": "MinHash",
+    "type":"record",
+    "fields":[
+        { "name": "scaled", "type": "int" },
+        { "name": "ksize", "type": "int" },
+        { "name": "molecule", "type": {
+          "type": "enum",
+          "name": "moltype",
+          "symbols": ["DNA", "protein", "hp", "dayhoff"] }
+        },
+        { "name":"hashes",
+          "type": {
+             "type": "array",  
+              "items":{
+                  "name":"hash",
+                   "type":"fixed",
+                   "size": 8
+              }
+           }
+        }
+    ]
     }"#;
 
     let sig_schema = r#"{
+    "name": "SourmashSignature",
+    "type":"record",
+    "fields":[
+       { "name": "filename", "type": "string"},
+       { "name": "name", "type": "string"},
+       { "name": "minhash", "type": "MinHash" }
+     ]
     }"#;
 
     let schema = avro_rs::Schema::parse_list(&[sig_schema, minhash_schema])?;
@@ -51,7 +78,6 @@ fn main() -> Result<()> {
     writer.append_ser(&signature)?;
     let encoded = writer.into_inner()?;
     dbg!(encoded);
-    */
 
     info!("flexbuffer: encoding");
     //let mut s = flexbuffers::FlexbufferSerializer::new();
