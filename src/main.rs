@@ -39,47 +39,55 @@ fn main() -> Result<()> {
     // Avro
     let sig_schema = r#"
 {
-    "name": "SourmashSignature",
+    "name": "Signature",
     "type":"record",
     "fields":[
+       { "name": "class", "type": "string"},
+       { "name": "email", "type": "string"},
+       { "name": "hash_function", "type": "string"},
        { "name": "filename", "type": "string"},
        { "name": "name", "type": "string"},
-       { "name": "minhash",
+       { "name": "license", "type": "string"},
+
+       { "name": "signatures",
          "type": {
-         "type": "record",
-         "name": "MinHash",
-         "fields":[
-           { "name": "num", "type": "int" },
-           { "name": "scaled", "type": "int" },
-           { "name": "ksize", "type": "int" },
-           { "name": "molecule", "type": {
-             "type": "enum",
-             "name": "moltype",
-             "symbols": ["DNA", "protein", "hp", "dayhoff"] }
-           },
-           { "name":"mins",
-             "type": {
-                "type": "array",  
-                 "items":{
-                     "name":"hash",
-                     "type":"fixed",
-                     "size": 8
-                 }
-              }
-           },
-           { "name":"abunds",
-             "type": {
-                 "type": "array",  
-                 "items":{
+            "type": "array",
+            "items": {
+
+           "name": "MinHash",
+           "type": "record",
+           "fields":[
+             { "name": "num", "type": "int" },
+             { "name": "ksize", "type": "int" },
+             { "name": "seed", "type": "int" },
+             { "name": "max_hash", "type": { "name": "ulong", "type": "fixed", "size": 8 } },
+             { "name":"mins",
+               "type": {
+                  "type": "array",  
+                   "items":{
+                       "name":"hash",
+                       "type":"fixed",
+                       "size": 8
+                   }
+                }
+             },
+             { "name": "md5sum", "type": "string" },
+             { "name":"abunds",
+               "type": {
+                  "type": "array",  
+                  "items":{
                      "name":"abund",
                      "type":"int"
-                 }
-             }
-           }
-         ]
+                   }
+                }
+             },
+           { "name": "molecule", "type": "string" }
+           ]
+         }
        }
        }
-    ]
+ 
+       ]
 }
 "#;
 
