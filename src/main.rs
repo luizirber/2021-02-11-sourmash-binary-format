@@ -48,6 +48,7 @@ fn main() -> Result<()> {
        { "name": "filename", "type": "string"},
        { "name": "name", "type": "string"},
        { "name": "license", "type": "string"},
+       { "name": "version", "type": "float" },
 
        { "name": "signatures",
          "type": {
@@ -61,6 +62,7 @@ fn main() -> Result<()> {
              { "name": "ksize", "type": "int" },
              { "name": "seed", "type": "int" },
              { "name": "max_hash", "type": { "name": "ulong", "type": "fixed", "size": 8 } },
+             { "name": "md5sum", "type": "string" },
              { "name":"mins",
                "type": {
                   "type": "array",  
@@ -71,7 +73,6 @@ fn main() -> Result<()> {
                    }
                 }
              },
-             { "name": "md5sum", "type": "string" },
              { "name":"abunds",
                "type": {
                   "type": "array",  
@@ -80,8 +81,7 @@ fn main() -> Result<()> {
                      "type":"int"
                    }
                 }
-             },
-           { "name": "molecule", "type": "string" }
+             }
            ]
          }
        }
@@ -95,9 +95,11 @@ fn main() -> Result<()> {
 
     let mut writer = avro_rs::Writer::with_codec(&schema[0], Vec::new(), avro_rs::Codec::Deflate);
 
+    info!("avro: encoding");
     writer.append_ser(&signature)?;
     let encoded = writer.into_inner()?;
     dbg!(encoded);
+    info!("avro: done");
 
     info!("flexbuffer: encoding");
     //let mut s = flexbuffers::FlexbufferSerializer::new();
