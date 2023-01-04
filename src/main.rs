@@ -37,21 +37,69 @@ fn main() -> Result<()> {
     std::fs::create_dir_all(&outdir)?;
 
     // Avro
-    /*
-    let minhash_schema = r#"{
-    }"#;
+    let sig_schema = r#"
+{
+    "name": "Signature",
+    "type":"record",
+    "fields":[
+       { "name": "class", "type": "string"},
+       { "name": "email", "type": "string"},
+       { "name": "hash_function", "type": "string"},
+       { "name": "filename", "type": "string"},
+       { "name": "name", "type": "string"},
+       { "name": "license", "type": "string"},
+       { "name": "version", "type": "float" },
 
-    let sig_schema = r#"{
-    }"#;
+       { "name": "signatures",
+         "type": {
+            "type": "array",
+            "items": {
 
-    let schema = avro_rs::Schema::parse_list(&[sig_schema, minhash_schema])?;
+           "name": "MinHash",
+           "type": "record",
+           "fields":[
+             { "name": "num", "type": "int" },
+             { "name": "ksize", "type": "int" },
+             { "name": "seed", "type": "int" },
+             { "name": "max_hash", "type": { "name": "ulong", "type": "fixed", "size": 8 } },
+             { "name": "md5sum", "type": "string" },
+             { "name":"mins",
+               "type": {
+                  "type": "array",  
+                   "items":{
+                       "name":"hash",
+                       "type":"fixed",
+                       "size": 8
+                   }
+                }
+             },
+             { "name":"abunds",
+               "type": {
+                  "type": "array",  
+                  "items":{
+                     "name":"abund",
+                     "type":"int"
+                   }
+                }
+             }
+           ]
+         }
+       }
+       }
+ 
+       ]
+}
+"#;
+
+    let schema = avro_rs::Schema::parse_list(&[sig_schema])?;
 
     let mut writer = avro_rs::Writer::with_codec(&schema[0], Vec::new(), avro_rs::Codec::Deflate);
 
+    info!("avro: encoding");
     writer.append_ser(&signature)?;
     let encoded = writer.into_inner()?;
     dbg!(encoded);
-    */
+    info!("avro: done");
 
     info!("flexbuffer: encoding");
     //let mut s = flexbuffers::FlexbufferSerializer::new();
